@@ -29,9 +29,20 @@ def sendEmail(request):
         mail_html += "<h4>* 관련 키워드 </h4><p>" + \
             restaurant.restaurant_keyword + "</p><br>"
         mail_html += "<br>"
-        mail_html += "</body></html>"
 
-        print(mail_html)
+    mail_html += "</body></html>"
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.login("hyojin1526@gmail.com", "!rbgus0116")
+
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = inputTitle
+    msg['From'] = 'hyojin1526@gmail.com'
+    msg['To'] = inputReceiver
+    mail_html = MIMEText(mail_html, 'html')
+    msg.attach(mail_html)
+    print(msg['To'], type(msg['To']))
+    server.sendmail(msg['From'], msg['To'].split(','), msg.as_string())
+    server.quit()
 
     return HttpResponseRedirect(reverse('index'))
     # return HttpResponse(mail_html)
